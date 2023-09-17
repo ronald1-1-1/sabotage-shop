@@ -1,32 +1,31 @@
 package shop.sabotaged.shop.enitity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "variant_changes_tb")
+@Table(name = "order_on_variant_tb")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VariantChangesEntity {
+public class OrderOnVariantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer amountDifference;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date date;
-
     @ManyToOne
     @JoinColumn(nullable = false)
     private VariantEntity variant;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private OrderEntity order;
+
+
+    @Column(nullable = false)
+    private Integer amount;
+
 }

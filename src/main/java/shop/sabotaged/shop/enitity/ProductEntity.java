@@ -1,8 +1,7 @@
 package shop.sabotaged.shop.enitity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -10,6 +9,9 @@ import java.util.List;
 @Table(name = "products_tb")
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductEntity {
 
     @Id
@@ -27,7 +29,7 @@ public class ProductEntity {
     @Column(nullable = false)
     private Boolean show;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<VariantEntity> variants;
 
 }

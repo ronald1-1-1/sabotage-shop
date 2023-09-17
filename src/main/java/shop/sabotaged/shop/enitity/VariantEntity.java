@@ -1,8 +1,7 @@
 package shop.sabotaged.shop.enitity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -10,10 +9,13 @@ import java.util.List;
 @Table(name = "variants_tb")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VariantEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -21,11 +23,14 @@ public class VariantEntity {
     private ProductEntity product;
 
     @OneToMany(mappedBy = "variant")
-    private List<OrderEntity> orders;
+    private List<OrderOnVariantEntity> orders;
 
     @OneToMany(mappedBy = "variant")
     private List<VariantChangesEntity> variantChanges;
 
-    @Column
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private Integer amount;
 }
