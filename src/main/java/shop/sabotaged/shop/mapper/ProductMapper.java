@@ -22,6 +22,7 @@ public class ProductMapper {
                         .id(variantEntity.getId())
                         .amount(variantEntity.getAmount())
                         .name(variantEntity.getName())
+                        .show(variantEntity.getShow())
                         .build()).toList());
         return productDto;
     }
@@ -30,12 +31,14 @@ public class ProductMapper {
         ProductEntity productEntity = modelMapper.map(createProductDto, ProductEntity.class);
         productEntity.setVariants(createProductDto.getVariants().stream()
                 .map(createVariantDto -> VariantEntity.builder()
-                        .name(createVariantDto.name)
+                        .name(createVariantDto.getName())
                         .amount(0)
                         .product(productEntity)
+                        .show(createVariantDto.getShow())
                         .build()).toList());
         return productEntity;
     }
+
 
 
 }

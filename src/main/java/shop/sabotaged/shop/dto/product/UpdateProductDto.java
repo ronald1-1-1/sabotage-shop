@@ -4,12 +4,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import shop.sabotaged.shop.dto.variant.CreateVariantDto;
+import shop.sabotaged.shop.dto.variant.UpdateVariantDto;
 
 import java.util.List;
 
 @Data
-public class CreateProductDto {
+public class UpdateProductDto {
 
     @NotBlank
     private String vendorCode;
@@ -27,5 +27,5 @@ public class CreateProductDto {
 
     @NotNull
     @Valid
-    private List<CreateVariantDto> variants;
+    private List<UpdateVariantDto> variants;
 }

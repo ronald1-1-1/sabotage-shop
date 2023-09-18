@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class CreateVariantDto {
+public class UpdateVariantDto {
+
+    public Long id;
 
     @NotBlank
     public String name;

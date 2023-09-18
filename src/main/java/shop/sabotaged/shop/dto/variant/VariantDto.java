@@ -23,4 +23,5 @@ public class VariantDto {
     private List<VariantChangesDto> variantChanges;
     private Integer amount;
     private String name;
+    private Boolean show;
 }

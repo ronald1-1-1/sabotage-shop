@@ -1,9 +1,11 @@
 package shop.sabotaged.shop.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shop.sabotaged.shop.dto.product.CreateProductDto;
 import shop.sabotaged.shop.dto.product.ProductDto;
+import shop.sabotaged.shop.dto.product.UpdateProductDto;
 import shop.sabotaged.shop.service.ProductService;
 
 import java.util.List;
@@ -21,7 +23,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto create(@RequestBody CreateProductDto createProductDto) {
-        return productService.createProduct(createProductDto);
+    public ProductDto create(@Valid @RequestBody CreateProductDto createProductDto) {
+        return productService.create(createProductDto);
+    }
+
+    @PutMapping
+    public ProductDto update(@Valid @RequestBody UpdateProductDto updateProductDto) {
+        return productService.update(updateProductDto);
     }
 }
