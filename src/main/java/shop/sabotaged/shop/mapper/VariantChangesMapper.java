@@ -9,18 +9,16 @@ import shop.sabotaged.shop.enitity.VariantChangesEntity;
 
 @Component
 @RequiredArgsConstructor
-public class VariantChangesMapper{
+public class VariantChangesMapper implements Mapper<VariantChangesDto, VariantChangesEntity> {
 
     private final ModelMapper modelMapper;
 
+    @Override
     public VariantChangesDto toDtoFromEntity(VariantChangesEntity variantChangesEntity) {
         VariantChangesDto variantChangesDto = modelMapper.map(variantChangesEntity, VariantChangesDto.class);
         variantChangesDto.setVariantId(variantChangesEntity.getVariant().getId());
         return variantChangesDto;
     }
 
-    public VariantChangesEntity toEntityFromCreateDto(CreateVariantChangesDto dto) {
-        return null;
-    }
 
 }

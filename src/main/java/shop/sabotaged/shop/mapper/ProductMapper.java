@@ -11,10 +11,11 @@ import shop.sabotaged.shop.enitity.VariantEntity;
 
 @Component
 @RequiredArgsConstructor
-public class ProductMapper {
+public class ProductMapper implements Mapper<ProductDto, ProductEntity> {
 
     private final ModelMapper modelMapper;
 
+    @Override
     public ProductDto toDtoFromEntity(ProductEntity productEntity) {
         ProductDto productDto = modelMapper.map(productEntity, ProductDto.class);
         productDto.setVariants(productEntity.getVariants().stream()
@@ -26,19 +27,5 @@ public class ProductMapper {
                         .build()).toList());
         return productDto;
     }
-
-    public ProductEntity toEntityFromCreateDto(CreateProductDto createProductDto) {
-        ProductEntity productEntity = modelMapper.map(createProductDto, ProductEntity.class);
-        productEntity.setVariants(createProductDto.getVariants().stream()
-                .map(createVariantDto -> VariantEntity.builder()
-                        .name(createVariantDto.getName())
-                        .amount(0)
-                        .product(productEntity)
-                        .show(createVariantDto.getShow())
-                        .build()).toList());
-        return productEntity;
-    }
-
-
 
 }

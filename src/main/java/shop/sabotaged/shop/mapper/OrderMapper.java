@@ -10,10 +10,11 @@ import shop.sabotaged.shop.enitity.OrderEntity;
 
 @Component
 @RequiredArgsConstructor
-public class OrderMapper{
+public class OrderMapper implements Mapper<OrderDto, OrderEntity> {
 
     private final ModelMapper modelMapper;
 
+    @Override
     public OrderDto toDtoFromEntity(OrderEntity orderEntity) {
         OrderDto orderDto = modelMapper.map(orderEntity, OrderDto.class);
         orderDto.setVariants(orderEntity.getVariants().stream()
@@ -23,10 +24,6 @@ public class OrderMapper{
                         orderOnVariantEntity.getAmount()
                 )).toList());
         return orderDto;
-    }
-
-    public OrderEntity toEntityFromCreateDto(CreateOrderDto createOrderDto) {
-        return null;
     }
 
 }

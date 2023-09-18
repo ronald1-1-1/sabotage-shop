@@ -11,10 +11,11 @@ import shop.sabotaged.shop.enitity.VariantEntity;
 
 @Component
 @RequiredArgsConstructor
-public class VariantMapper{
+public class VariantMapper implements Mapper<VariantDto, VariantEntity>{
 
     private final ModelMapper modelMapper;
 
+    @Override
     public VariantDto toDtoFromEntity(VariantEntity variantEntity) {
         VariantDto variantDto = modelMapper.map(variantEntity, VariantDto.class);
         variantDto.setOrders(variantEntity.getOrders().stream()
