@@ -12,6 +12,7 @@ public class VariantChangesDto {
 
     private Long id;
     private Integer amountDifference;
+    private String comment;
     private Date date;
     private Long variantId;
 }

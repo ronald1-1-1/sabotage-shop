@@ -22,6 +22,9 @@ public class VariantChangesEntity {
     @Column(nullable = false)
     private Integer amountDifference;
 
+    @Column
+    private String comment;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date date;
