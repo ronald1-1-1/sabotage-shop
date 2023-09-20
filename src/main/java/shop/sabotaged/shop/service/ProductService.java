@@ -3,6 +3,7 @@ package shop.sabotaged.shop.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.sabotaged.shop.dto.product.CreateProductDto;
 import shop.sabotaged.shop.dto.product.ProductDto;
 import shop.sabotaged.shop.dto.product.UpdateProductDto;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -33,10 +35,11 @@ public class ProductService {
 
     public ProductDto get(String vendorCode) {
         ProductEntity productEntity = productRepository.findById(vendorCode)
-                .orElseThrow(ObjectNotFoundException::new);
+                .orElseThrow(() -> new ObjectNotFoundException("Product", vendorCode));
         return productMapper.toDtoFromEntity(productEntity);
     }
 
+    @Transactional(readOnly = false)
     public ProductDto create(CreateProductDto createProductDto) {
         ProductEntity productEntity = modelMapper.map(createProductDto, ProductEntity.class);
         productEntity.setVariants(createProductDto.getVariants().stream()
@@ -49,9 +52,10 @@ public class ProductService {
         return productMapper.toDtoFromEntity(productEntity);
     }
 
+    @Transactional(readOnly = false)
     public ProductDto update(UpdateProductDto updateProductDto) {
         ProductEntity productEntity = productRepository.findById(updateProductDto.getVendorCode())
-                .orElseThrow(ObjectNotFoundException::new);
+                .orElseThrow(() -> new ObjectNotFoundException("Product", updateProductDto.getVendorCode()));
         productEntity.setName(updateProductDto.getName());
         productEntity.setShow(updateProductDto.getShow());
         productEntity.setPrice(updateProductDto.getPrice());

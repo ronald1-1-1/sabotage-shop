@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -32,26 +33,27 @@ public class OrderService {
 
     public OrderDto get(Long id) {
         OrderEntity orderEntity = orderRepository.findById(id)
-                .orElseThrow(ObjectNotFoundException::new);
+                .orElseThrow(() -> new ObjectNotFoundException("Order", id));
         return orderMapper.toDtoFromEntity(orderEntity);
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public OrderDto create(CreateOrderDto createOrderDto) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setDate(new Date());
         orderEntity.setVariants(createOrderDto.getVariants().stream()
                 .map(createOrderOnVariantDto -> OrderOnVariantEntity.builder()
                         .variant(variantRepository.findById(createOrderOnVariantDto.getVariantId())
-                                    .orElseThrow(ObjectNotFoundException::new))
+                                    .orElseThrow(() -> new ObjectNotFoundException(
+                                            "Variant",
+                                            createOrderOnVariantDto.getVariantId())))
                         .amount(createOrderOnVariantDto.getAmount())
                         .build()).toList());
         orderEntity.getVariants().forEach(orderOnVariantEntity -> {
             VariantEntity variantEntity = orderOnVariantEntity.getVariant();
             variantEntity.setAmount(variantEntity.getAmount() - orderOnVariantEntity.getAmount());
             if (variantEntity.getAmount() < 0) {
-                throw new NotEnoughVariantAmountException(String.format("Not enough amount of variant with id %s",
-                        variantEntity.getId()));
+                throw new NotEnoughVariantAmountException(variantEntity.getId());
             }
             variantRepository.save(variantEntity);
         });
