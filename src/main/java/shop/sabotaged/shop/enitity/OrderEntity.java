@@ -19,7 +19,7 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST})
     private List<OrderOnVariantEntity> variants;
 
     @Temporal(TemporalType.TIMESTAMP)

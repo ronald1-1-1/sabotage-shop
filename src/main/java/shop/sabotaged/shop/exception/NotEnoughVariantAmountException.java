@@ -4,5 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class ObjectNotFound extends RuntimeException{
+public class NotEnoughVariantAmountException extends RuntimeException {
+
+    public NotEnoughVariantAmountException(String message) {
+        super(message);
+    }
+
 }

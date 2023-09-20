@@ -1,10 +1,13 @@
 package shop.sabotaged.shop.dto.orderonvariant;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import shop.sabotaged.shop.dto.variant.VariantDto;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrderOnVariantDto {
 
