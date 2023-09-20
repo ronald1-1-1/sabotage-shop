@@ -22,6 +22,11 @@ public class ProductController {
         return productService.getAll();
     }
 
+    @GetMapping("/{vendorCode}")
+    public ProductDto get(@PathVariable String vendorCode) {
+        return productService.get(vendorCode);
+    }
+
     @PostMapping
     public ProductDto create(@Valid @RequestBody CreateProductDto createProductDto) {
         return productService.create(createProductDto);

@@ -1,6 +1,7 @@
 package shop.sabotaged.shop.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import shop.sabotaged.shop.dto.product.CreateProductDto;
 import shop.sabotaged.shop.dto.product.ProductDto;
@@ -8,7 +9,7 @@ import shop.sabotaged.shop.dto.product.UpdateProductDto;
 import shop.sabotaged.shop.dto.variant.UpdateVariantDto;
 import shop.sabotaged.shop.enitity.ProductEntity;
 import shop.sabotaged.shop.enitity.VariantEntity;
-import shop.sabotaged.shop.exception.ObjectNotFound;
+import shop.sabotaged.shop.exception.ObjectNotFoundException;
 import shop.sabotaged.shop.mapper.ProductMapper;
 import shop.sabotaged.shop.repository.ProductRepository;
 
@@ -23,21 +24,34 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final ModelMapper modelMapper;
 
     public List<ProductDto> getAll() {
         return productRepository.findAll().stream()
                 .map(productMapper::toDtoFromEntity).toList();
     }
 
+    public ProductDto get(String vendorCode) {
+        ProductEntity productEntity = productRepository.findById(vendorCode)
+                .orElseThrow(ObjectNotFoundException::new);
+        return productMapper.toDtoFromEntity(productEntity);
+    }
+
     public ProductDto create(CreateProductDto createProductDto) {
-        ProductEntity productEntity = productMapper.toEntityFromCreateDto(createProductDto);
+        ProductEntity productEntity = modelMapper.map(createProductDto, ProductEntity.class);
+        productEntity.setVariants(createProductDto.getVariants().stream()
+                .map(createVariantDto -> VariantEntity.builder()
+                        .name(createVariantDto.getName())
+                        .amount(0)
+                        .show(createVariantDto.getShow())
+                        .build()).toList());
         productEntity = productRepository.save(productEntity);
         return productMapper.toDtoFromEntity(productEntity);
     }
 
     public ProductDto update(UpdateProductDto updateProductDto) {
         ProductEntity productEntity = productRepository.findById(updateProductDto.getVendorCode())
-                .orElseThrow(ObjectNotFound::new);
+                .orElseThrow(ObjectNotFoundException::new);
         productEntity.setName(updateProductDto.getName());
         productEntity.setShow(updateProductDto.getShow());
         productEntity.setPrice(updateProductDto.getPrice());
