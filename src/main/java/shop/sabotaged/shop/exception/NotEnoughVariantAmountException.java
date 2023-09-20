@@ -10,4 +10,8 @@ public class NotEnoughVariantAmountException extends RuntimeException {
         super(message);
     }
 
+    public NotEnoughVariantAmountException(Long id) {
+        this(String.format("Not enough amount of variant with id %s", id));
+    }
+
 }
